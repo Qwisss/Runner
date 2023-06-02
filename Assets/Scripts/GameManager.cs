@@ -5,6 +5,7 @@ using TMPro;
 
 public class GameManager : MonoBehaviour
 {
+    [SerializeField] private AudioSource _audioSource;
     [SerializeField] private TextMeshProUGUI _coinsText;
     
     private int _coinsCount;
@@ -14,5 +15,8 @@ public class GameManager : MonoBehaviour
     {
         _coinsCount++;
         _coinsText.text = _coinsCount.ToString();
+        _audioSource.Play();
+        
     }
 }
+    

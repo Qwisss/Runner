@@ -11,9 +11,14 @@ public class Tile : MonoBehaviour
 
     void Start()
     {
-        int randomPointIndex = Random.Range(0, _points.Count);
-        GameObject newCoin = Instantiate(_coin, _points[randomPointIndex].position, Quaternion.identity);
-        newCoin.transform.SetParent(transform);
+        int RandPoints = Random.Range(0, 3);
+        for (int i = 0; i < RandPoints; i++)
+        {
+            int randomPointIndex = Random.Range(0, _points.Count);
+            GameObject newCoin = Instantiate(_coin, _points[randomPointIndex].position, Quaternion.identity);
+            newCoin.transform.SetParent(transform);
+        }
+        
     }
 
     private void FixedUpdate()
