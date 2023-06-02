@@ -372,11 +372,11 @@ MonoBehaviour:
   speed: 1
   _points:
   - {fileID: 9017502626458593988}
-  - {fileID: 9069305718767950358}
-  - {fileID: 6030271168104053416}
   - {fileID: 1097943398}
+  - {fileID: 9069305718767950358}
   - {fileID: 1735984092}
-  _coin: {fileID: 1402426659159384021, guid: b06eab452476bf54f9b05cd640e8719f, type: 3}
+  - {fileID: 6030271168104053416}
+  _coin: {fileID: 5146665198899739731, guid: b06eab452476bf54f9b05cd640e8719f, type: 3}
 --- !u!1 &7158745665943127741
 GameObject:
   m_ObjectHideFlags: 0

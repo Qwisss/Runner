@@ -11,4 +11,5 @@ public class Coin : MonoBehaviour
         FindObjectOfType<GameManager>().AddCoin();
         Destroy(gameObject);
     }
+
 }
