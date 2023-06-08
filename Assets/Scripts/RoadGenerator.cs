@@ -4,14 +4,19 @@ using UnityEngine;
 
 public class RoadGenerator : MonoBehaviour
 {
+    public float speed = 0;
+    static public RoadGenerator instance;
+
     [SerializeField] private GameObject _roadPrefab;
     [SerializeField] private List<GameObject> _roads = new List<GameObject>();
-    [SerializeField] private float _maxSpeed;
-    [SerializeField] private float _speed;
-    [SerializeField] private int _maxRoadCount;
+    [SerializeField] private float _maxSpeed = 10;
+    [SerializeField] private int _maxRoadCount = 10;
 
-    
 
+    public void Awake()
+    {
+        instance = this;
+    }
     private void Start()
     {
         
@@ -21,16 +26,16 @@ public class RoadGenerator : MonoBehaviour
 
     private void Update()
     {
-        if (_speed == 0)
+        if (speed == 0)
         {
             return;
         }
 
         foreach (GameObject _road in _roads)
         {
-            _road.transform.position -= new Vector3(0, 0, _speed * Time.deltaTime);
+            _road.transform.position -= new Vector3(0, 0, speed * Time.deltaTime);
         }
-        if (_roads[0].transform.position.z < -20)
+        if (_roads[0].transform.position.z < -100)
         {
             Destroy(_roads[0]);
             _roads.RemoveAt(0);
@@ -54,15 +59,15 @@ public class RoadGenerator : MonoBehaviour
     public void StartLevel()
     {
         Cursor.lockState = CursorLockMode.Locked;
-        FindObjectOfType<Player>().StartRun();
-        _speed = _maxSpeed;
+        FindObjectOfType<PlayerController>().StartRun();
+        speed = _maxSpeed;
         SwipeSystem.instance.enabled = true;
     }
 
 
     public void ResetLevel()
     {
-        _speed = 0;
+        speed = 0;
         while (_roads.Count > 0) 
         {
             Destroy(_roads[0]);
@@ -73,5 +78,6 @@ public class RoadGenerator : MonoBehaviour
             CreateNextRoad();
         }
         SwipeSystem.instance.enabled = false;
+        MapGenerator.instance.ResetMaps();
     }
 }

@@ -51,7 +51,8 @@ public class GamePause : MonoBehaviour
     }
 
     public void RestartGame()
-    {      
+    {
+        Cursor.lockState = CursorLockMode.None;
         SceneManager.LoadScene("GameScene1");
         Time.timeScale = 1f;
         GameIsPaused = false;
