@@ -16,6 +16,7 @@ public class Player : MonoBehaviour
 
     private void Start()
     {
+        FindObjectOfType<RoadGenerator>();
         animator = GetComponent<Animator>();
         startGamePosition = transform.position;
         startGameRotation = transform.rotation;
