@@ -59,10 +59,10 @@ public class PlayerController : MonoBehaviour
             MoveHorizontal(laneChangeSpeed);
         }             
 
-        if (Input.GetKeyUp(KeyCode.W) && isJumping == false)
+        if (Input.GetKeyUp(KeyCode.W) && isJumping == false )
         {
             Jump();
-            //animator.SetTrigger("Jump");
+            animator.SetTrigger("Jump");
         }
         if (Input.GetKeyUp(KeyCode.S))
         {
@@ -82,10 +82,10 @@ public class PlayerController : MonoBehaviour
             MoveHorizontal(laneChangeSpeed);
         }
 
-        if (swipes[(int)SwipeSystem.Direction.Up] || Input.GetKeyUp(KeyCode.W) && isJumping == false)
+        if (swipes[(int)SwipeSystem.Direction.Up] || Input.GetKeyUp(KeyCode.W) && isJumping == false )
         {
             Jump();
-            //animator.SetTrigger("Jump");
+            animator.SetTrigger("Jump");
         }
         if (swipes[(int)SwipeSystem.Direction.Down] || Input.GetKeyUp(KeyCode.S))
         {

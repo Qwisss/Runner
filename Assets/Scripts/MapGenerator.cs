@@ -50,7 +50,9 @@ public class MapGenerator : MonoBehaviour
         instance = this; mapSize = _itemCountInMap * _itemSpace;
         maps.Add(MakeMap1());       
         maps.Add(MakeMap2());
-        
+        maps.Add(MakeMap1());
+        maps.Add(MakeMap2());
+
         foreach (GameObject map in maps)
         {
             map.SetActive(false);
@@ -128,7 +130,7 @@ public class MapGenerator : MonoBehaviour
             {
                 item.SetValue(_obstacleBotPrefab, TrackPos.Left, CoinsStyle.Jump);
             }
-            Vector3 obstaclePos = new Vector3(laneOffset, 0, i * _itemSpace);
+            Vector3 obstaclePos = new Vector3((int)item.trackPos * laneOffset, 0, i * _itemSpace);
             CreateCoins(item.coinStyle, obstaclePos, result);
 
             if (item.obstacle != null)
@@ -162,7 +164,7 @@ public class MapGenerator : MonoBehaviour
             {
                 item.SetValue(_obstacleBotPrefab, TrackPos.Right, CoinsStyle.Jump);
             }
-            Vector3 obstaclePos = new Vector3(laneOffset, 0, i * _itemSpace);
+            Vector3 obstaclePos = new Vector3((int)item.trackPos * laneOffset, 0, i * _itemSpace);
             CreateCoins(item.coinStyle, obstaclePos, result);
 
             if (item.obstacle != null)
