@@ -5,7 +5,7 @@ using UnityEngine.EventSystems;
 
 public class SwipeSystem : MonoBehaviour
 {
-
+/*
     public static SwipeSystem instance;
     public enum Direction { Left, Right, Up, Down }
     public delegate void ClickDelegate(Vector2 pos);
@@ -109,7 +109,7 @@ public class SwipeSystem : MonoBehaviour
         {
             swipe[i] = false;
         }
-    }
+    }*/
 }
 
 

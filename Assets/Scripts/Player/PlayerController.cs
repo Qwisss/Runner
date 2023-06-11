@@ -7,11 +7,8 @@ using UnityEngine.SceneManagement;
 public class PlayerController : MonoBehaviour
 {
     
-    [SerializeField] private float _laneOffset = 2.5f;
-    [SerializeField] private float _laneChangeSpeed = 15f;
-
-    private float _timeElapsed;
-    private float _lerpDuration = 0.5f;
+    private float _laneChangeSpeed = 15f;
+    private float _laneOffset = 2.5f;   
     private float _pointStart;
     private float _pointFinish;
     private float _lastVectorX;
@@ -38,29 +35,19 @@ public class PlayerController : MonoBehaviour
 
     private void Awake()
     {
-
-        setTirggerRun = DataHolder.runIndexForPlayerController;
-        Debug.LogError(setTirggerRun);
-        Debug.LogError("awake");
-
-
-
+        setTirggerRun = DataHolder.runIndexForPlayerController;       
     }
 
     private void Start()
-    {
-       
+    {    
         _laneOffset = MapGenerator.instance.laneOffset;
         FindObjectOfType<RoadGenerator>();
         rigidBody = GetComponent<Rigidbody>();
         animator = GetComponent<Animator>();
         startGamePosition = transform.position;
         //startGameRotation = transform.rotation;
-        SwipeSystem.instance.MoveEvent += MovePlayer;
+        /*SwipeSystem.instance.MoveEvent += MovePlayer;*/
         
-
-
-
     }
     private void Update()
     {
@@ -86,7 +73,7 @@ public class PlayerController : MonoBehaviour
     }
    
 
-    private void MovePlayer(bool[] swipes)
+   /* private void MovePlayer(bool[] swipes)
     {
         if (swipes[(int)SwipeSystem.Direction.Left] ||Input.GetKeyUp(KeyCode.A) && _pointFinish > -_laneOffset)
         {
@@ -107,10 +94,8 @@ public class PlayerController : MonoBehaviour
             animator.SetTrigger("Slide");
             //isSlide = true;
            
-            
-
         }
-    }
+    }*/
   
 
     private void Jump()
@@ -143,8 +128,7 @@ public class PlayerController : MonoBehaviour
         { 
             StopCoroutine (movingCoroutine); isMoving = false; 
         }
-        movingCoroutine = StartCoroutine(MoveCoroutine(speed));
-            
+        movingCoroutine = StartCoroutine(MoveCoroutine(speed));            
     }
 
     IEnumerator MoveCoroutine(float vectorX)
@@ -153,7 +137,6 @@ public class PlayerController : MonoBehaviour
         while (Mathf.Abs(_pointStart - transform.position.x) < _laneOffset)
         {
             yield return new WaitForFixedUpdate();
-
             rigidBody.velocity = new Vector3(vectorX, rigidBody.velocity.y, 0);
             _lastVectorX = vectorX;
             float x = Mathf.Clamp(transform.position.x, Mathf.Min(_pointStart, _pointFinish), Mathf.Max(_pointStart, _pointFinish));
@@ -185,14 +168,12 @@ public class PlayerController : MonoBehaviour
         {
             FindObjectOfType<GamePause>().RestartGame();
         }
-
     }
     private void OnTriggerExit(Collider other)
     {
         if (other.gameObject.tag == "Ramp")
         {
             rigidBody.constraints &= ~RigidbodyConstraints.FreezePositionZ;
-
         }
     }
 
@@ -202,8 +183,6 @@ public class PlayerController : MonoBehaviour
         {
             rigidBody.velocity = new Vector3(rigidBody.velocity.x, 0, rigidBody.velocity.z);
         }
-       
-
     }
 
     private void OnCollisionExit(Collision collision)
@@ -220,28 +199,19 @@ public class PlayerController : MonoBehaviour
     {
         if (setTirggerRun == 0)
         {
-            Debug.LogError(setTirggerRun);
             animator.SetTrigger("FastRun");
-            
-            isStarted = true;
 
         }
         if (setTirggerRun == 1)
         {
-            Debug.LogError(setTirggerRun);
-            animator.SetTrigger("DrunkRun");           
-            isStarted = true;
+            animator.SetTrigger("DrunkRun");                      
         }
         if (setTirggerRun == 2)
-        {
-            Debug.LogError(setTirggerRun);
-            
+        {          
             animator.SetTrigger("InjuredRun");           
-            isStarted = true;
         }
-        
-        
-
+        isStarted = true;
     }
-   
 }
+   
+

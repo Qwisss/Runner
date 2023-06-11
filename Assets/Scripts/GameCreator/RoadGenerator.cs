@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static MapGenerator;
 
 public class RoadGenerator : MonoBehaviour
 {
@@ -35,7 +36,7 @@ public class RoadGenerator : MonoBehaviour
         {
             _road.transform.position -= new Vector3(0, 0, speed * Time.deltaTime);
         }
-        if (_roads[0].transform.position.z < -40)
+        if (_roads[0].transform.position.z < -60)
         {
             Destroy(_roads[0]);
             _roads.RemoveAt(0);
@@ -61,7 +62,7 @@ public class RoadGenerator : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         FindObjectOfType<PlayerController>().StartRun();
         speed = _maxSpeed;
-        SwipeSystem.instance.enabled = true;
+        //SwipeSystem.instance.enabled = true;
     }
 
 
@@ -77,7 +78,8 @@ public class RoadGenerator : MonoBehaviour
         {
             CreateNextRoad();
         }
-        SwipeSystem.instance.enabled = false;
+        //SwipeSystem.instance.enabled = false;
         MapGenerator.instance.ResetMaps();
+        
     }
 }

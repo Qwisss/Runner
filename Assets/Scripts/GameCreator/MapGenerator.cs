@@ -17,7 +17,7 @@ public class MapGenerator : MonoBehaviour
     [SerializeField] private GameObject _rampPrefab;
     [SerializeField] private GameObject _coinPrefab;
 
-    private int _itemSpace = 15;
+    private int _itemSpace = 25;
     private int _itemCountInMap = 5;
     private int coinsCountInItem = 15;
     private int _mapSize;
@@ -53,10 +53,7 @@ public class MapGenerator : MonoBehaviour
         maps.Add(MakeMap2());
         maps.Add(MakeMap3());
         maps.Add(MakeMap4());
-        maps.Add(MakeMap1());
-        maps.Add(MakeMap2());
-        maps.Add(MakeMap3());
-        maps.Add(MakeMap4());
+        
 
 
         foreach (GameObject map in maps)

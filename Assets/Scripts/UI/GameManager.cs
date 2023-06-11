@@ -12,17 +12,11 @@ public class GameManager : MonoBehaviour
 
     private int _coinsCount;
     
-
     private void Awake()
-    {
-       
+    {      
         _coinCount.text = PlayerPrefs.GetInt("coins").ToString();
-
     }
   
-    
-
-
     public void AddCoin()
     {
         int coins = PlayerPrefs.GetInt("coins");

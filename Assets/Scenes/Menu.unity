@@ -1819,7 +1819,6 @@ MonoBehaviour:
   _block: {fileID: 1238290546}
   _objectPrice: {fileID: 287328137}
   _CoinCount: {fileID: 301007652}
-  _isEquip: 0
 --- !u!1 &371358567
 GameObject:
   m_ObjectHideFlags: 0
@@ -6554,7 +6553,6 @@ MonoBehaviour:
   _block: {fileID: 115986019}
   _objectPrice: {fileID: 787401948}
   _CoinCount: {fileID: 301007652}
-  _isEquip: 0
 --- !u!1 &1736875240
 GameObject:
   m_ObjectHideFlags: 0
@@ -6951,7 +6949,6 @@ MonoBehaviour:
   _block: {fileID: 330750752}
   _objectPrice: {fileID: 245544456}
   _CoinCount: {fileID: 301007652}
-  _isEquip: 0
 --- !u!1 &1849766183
 GameObject:
   m_ObjectHideFlags: 0

@@ -8,21 +8,21 @@ public class AnimationItem : MonoBehaviour
 {
   
     [SerializeField] private int _indexItem;
-    [SerializeField] TextMeshProUGUI _objectName;   
+    [SerializeField] TextMeshProUGUI _objectName;   //name shomitem(animation)
     [SerializeField] private AnimationClip animationClip;
     [SerializeField] private int _price;
     [SerializeField] private int _access;
     [SerializeField] GameObject _block;
     [SerializeField] TextMeshProUGUI _objectPrice;
     [SerializeField] TextMeshProUGUI _CoinCount;
-    [SerializeField] private bool _isEquip = false;
+
+    
     
 
     private void Awake()
     {
         //PlayerPrefs.SetInt("coins", 1000); //AddMoney
-        AccessUpdate();       
-        
+        AccessUpdate();        
     }
     private void Start()
     {
@@ -39,16 +39,13 @@ public class AnimationItem : MonoBehaviour
             {
                 PlayerPrefs.SetInt(_objectName + "Access", 1);
                 PlayerPrefs.SetInt("coins", coins - _price);
-                AccessUpdate();
-                
+                AccessUpdate();  
             }
         }
     }
 
     public void EquipItem()
     {
-        _isEquip = true;
-        AccessUpdate();
         if (_access == 1)
         {
             AccessUpdate();
@@ -56,28 +53,20 @@ public class AnimationItem : MonoBehaviour
             {
                 DataHolder.runIndexForPlayerController = 0;
                 AccessUpdate();              
-                Debug.LogError(DataHolder.runIndexForPlayerController);
             }
             if (_indexItem == 1)
             {
                 DataHolder.runIndexForPlayerController = 1;
-                AccessUpdate();
-                
-                Debug.LogError(DataHolder.runIndexForPlayerController);
+                AccessUpdate();        
             }
             if (_indexItem == 2)
             {
                 DataHolder.runIndexForPlayerController = 2;
-                AccessUpdate();
-                
-                Debug.LogError(DataHolder.runIndexForPlayerController);
+                AccessUpdate();          
             }
-            AccessUpdate();
         }
-        
     }
   
-
     public void AccessUpdate()
     {
         _access = PlayerPrefs.GetInt(_objectName + "Access");
