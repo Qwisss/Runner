@@ -35,7 +35,7 @@ public class RoadGenerator : MonoBehaviour
         {
             _road.transform.position -= new Vector3(0, 0, speed * Time.deltaTime);
         }
-        if (_roads[0].transform.position.z < -100)
+        if (_roads[0].transform.position.z < -40)
         {
             Destroy(_roads[0]);
             _roads.RemoveAt(0);

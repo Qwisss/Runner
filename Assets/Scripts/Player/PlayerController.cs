@@ -7,18 +7,18 @@ using UnityEngine.SceneManagement;
 public class PlayerController : MonoBehaviour
 {
     
-    [SerializeField] private float laneOffset = 2.5f;
-    [SerializeField] private float laneChangeSpeed = 15f;
+    [SerializeField] private float _laneOffset = 2.5f;
+    [SerializeField] private float _laneChangeSpeed = 15f;
 
-    private float timeElapsed;
-    private float lerpDuration = 0.5f;
-    private float pointStart;
-    private float pointFinish;
-    private float lastVectorX;
-    private float jumpPower = 15f;
-    private float jumpGravity = -40;
-    private float realGravity = -9.8f;
-    
+    private float _timeElapsed;
+    private float _lerpDuration = 0.5f;
+    private float _pointStart;
+    private float _pointFinish;
+    private float _lastVectorX;
+    private float _jumpPower = 15f;
+    private float _jumpGravity = -40f;
+    private float _realGravity = -9.8f;   
+    private int setTirggerRun;
 
     Animator animator;
    
@@ -27,59 +27,74 @@ public class PlayerController : MonoBehaviour
 
     bool isJumping = false;
     bool isMoving = false;
-    bool isSlide = false;
+    //bool isSlide = false;
+    bool isStarted = false;
+   
 
     Coroutine movingCoroutine;
 
-    Rigidbody rb;
+    Rigidbody rigidBody;
     //Quaternion startGameRotation;
 
+    private void Awake()
+    {
+
+        setTirggerRun = DataHolder.runIndexForPlayerController;
+        Debug.LogError(setTirggerRun);
+        Debug.LogError("awake");
+
+
+
+    }
 
     private void Start()
     {
-        laneOffset = MapGenerator.instance.laneOffset;
+       
+        _laneOffset = MapGenerator.instance.laneOffset;
         FindObjectOfType<RoadGenerator>();
-        rb = GetComponent<Rigidbody>();
+        rigidBody = GetComponent<Rigidbody>();
         animator = GetComponent<Animator>();
         startGamePosition = transform.position;
         //startGameRotation = transform.rotation;
         SwipeSystem.instance.MoveEvent += MovePlayer;
         
-        
+
+
 
     }
     private void Update()
     {
-        if (Input.GetKeyUp(KeyCode.A) && pointFinish > -laneOffset)
+        if (Input.GetKeyUp(KeyCode.A) && _pointFinish > -_laneOffset && isStarted)
         {
-            MoveHorizontal(-laneChangeSpeed);
+            MoveHorizontal(-_laneChangeSpeed);
         }
-        if (Input.GetKeyUp(KeyCode.D) && pointFinish < laneOffset)
+        if (Input.GetKeyUp(KeyCode.D) && _pointFinish < _laneOffset && isStarted)
         {
-            MoveHorizontal(laneChangeSpeed);
+            MoveHorizontal(_laneChangeSpeed);
         }             
 
-        if (Input.GetKeyUp(KeyCode.W) && isJumping == false )
+        if (Input.GetKeyUp(KeyCode.W) && isJumping == false && isStarted)
         {
             Jump();
             animator.SetTrigger("Jump");
         }
-        if (Input.GetKeyUp(KeyCode.S))
+        if (Input.GetKeyUp(KeyCode.S) && isStarted)
         {
             animator.SetTrigger("Slide");
             
         }
     }
+   
 
     private void MovePlayer(bool[] swipes)
     {
-        if (swipes[(int)SwipeSystem.Direction.Left] ||Input.GetKeyUp(KeyCode.A) && pointFinish > -laneOffset)
+        if (swipes[(int)SwipeSystem.Direction.Left] ||Input.GetKeyUp(KeyCode.A) && _pointFinish > -_laneOffset)
         {
-            MoveHorizontal(-laneChangeSpeed);
+            MoveHorizontal(-_laneChangeSpeed);
         }
-        if (swipes[(int)SwipeSystem.Direction.Right] || Input.GetKeyUp(KeyCode.D) && pointFinish < laneOffset)
+        if (swipes[(int)SwipeSystem.Direction.Right] || Input.GetKeyUp(KeyCode.D) && _pointFinish < _laneOffset)
         {
-            MoveHorizontal(laneChangeSpeed);
+            MoveHorizontal(_laneChangeSpeed);
         }
 
         if (swipes[(int)SwipeSystem.Direction.Up] || Input.GetKeyUp(KeyCode.W) && isJumping == false )
@@ -90,7 +105,7 @@ public class PlayerController : MonoBehaviour
         if (swipes[(int)SwipeSystem.Direction.Down] || Input.GetKeyUp(KeyCode.S))
         {
             animator.SetTrigger("Slide");
-            isSlide = true;
+            //isSlide = true;
            
             
 
@@ -101,8 +116,8 @@ public class PlayerController : MonoBehaviour
     private void Jump()
     {
         isJumping = true;
-        rb.AddForce(Vector3.up * jumpPower, ForceMode.Impulse);
-        Physics.gravity = new Vector3(0, jumpGravity, 0);
+        rigidBody.AddForce(Vector3.up * _jumpPower, ForceMode.Impulse);
+        Physics.gravity = new Vector3(0, _jumpGravity, 0);
         StartCoroutine(StopJumpCourutine());
     }
 
@@ -111,9 +126,9 @@ public class PlayerController : MonoBehaviour
         do
         {
             yield return new WaitForSeconds(0.02f);
-        } while (rb.velocity.y != 0);
+        } while (rigidBody.velocity.y != 0);
         isJumping = false;
-        Physics.gravity = new Vector3(0, realGravity, 0);
+        Physics.gravity = new Vector3(0, _realGravity, 0);
     }
 
 
@@ -121,8 +136,8 @@ public class PlayerController : MonoBehaviour
     private void MoveHorizontal(float speed)
     {
         animator.applyRootMotion = false; 
-        pointStart = pointFinish;
-        pointFinish += Mathf.Sign(speed) * laneOffset;
+        _pointStart = _pointFinish;
+        _pointFinish += Mathf.Sign(speed) * _laneOffset;
 
         if (isMoving) 
         { 
@@ -135,20 +150,20 @@ public class PlayerController : MonoBehaviour
     IEnumerator MoveCoroutine(float vectorX)
     {
         isMoving = true;
-        while (Mathf.Abs(pointStart - transform.position.x) < laneOffset)
+        while (Mathf.Abs(_pointStart - transform.position.x) < _laneOffset)
         {
             yield return new WaitForFixedUpdate();
 
-            rb.velocity = new Vector3(vectorX, rb.velocity.y, 0);
-            lastVectorX = vectorX;
-            float x = Mathf.Clamp(transform.position.x, Mathf.Min(pointStart, pointFinish), Mathf.Max(pointStart, pointFinish));
+            rigidBody.velocity = new Vector3(vectorX, rigidBody.velocity.y, 0);
+            _lastVectorX = vectorX;
+            float x = Mathf.Clamp(transform.position.x, Mathf.Min(_pointStart, _pointFinish), Mathf.Max(_pointStart, _pointFinish));
             transform.position = new Vector3(x, transform.position.y, transform.position.z);
         }
-        rb.velocity = Vector3.zero;
-        transform.position = new Vector3(pointFinish, transform.position.y, transform.position.z);
+        rigidBody.velocity = Vector3.zero;
+        transform.position = new Vector3(_pointFinish, transform.position.y, transform.position.z);
         if (transform.position.y > 1)
         {
-            rb.velocity = new Vector3(rb.velocity.x, -10, rb.velocity.y);
+            rigidBody.velocity = new Vector3(rigidBody.velocity.x, -10, rigidBody.velocity.y);
 
         }
         isMoving = false;
@@ -159,12 +174,12 @@ public class PlayerController : MonoBehaviour
     {
         if (other.gameObject.tag == "Ramp") 
         {
-            rb.constraints |= RigidbodyConstraints.FreezePositionZ;
+            rigidBody.constraints |= RigidbodyConstraints.FreezePositionZ;
         
         }
         if (other.gameObject.tag == "NotLose")
         {
-            MoveHorizontal(-lastVectorX);
+            MoveHorizontal(-_lastVectorX);
         }
         if (other.gameObject.tag == "Lose")
         {
@@ -176,7 +191,7 @@ public class PlayerController : MonoBehaviour
     {
         if (other.gameObject.tag == "Ramp")
         {
-            rb.constraints &= ~RigidbodyConstraints.FreezePositionZ;
+            rigidBody.constraints &= ~RigidbodyConstraints.FreezePositionZ;
 
         }
     }
@@ -185,7 +200,7 @@ public class PlayerController : MonoBehaviour
     {
         if (collision.gameObject.tag == "Ground")
         {
-            rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
+            rigidBody.velocity = new Vector3(rigidBody.velocity.x, 0, rigidBody.velocity.z);
         }
        
 
@@ -195,16 +210,38 @@ public class PlayerController : MonoBehaviour
     {
         if(collision.gameObject.tag == "RampPlane")
         {
-            if (rb.velocity.x == 0 && isJumping == false)
+            if (rigidBody.velocity.x == 0 && isJumping == false)
             {
-                rb.velocity = new Vector3(rb.velocity.x, -10, rb.velocity.z);
+                rigidBody.velocity = new Vector3(rigidBody.velocity.x, -10, rigidBody.velocity.z);
             }
         }
     }
     public void StartRun()
     {
-        animator.SetTrigger("Run");
-       
+        if (setTirggerRun == 0)
+        {
+            Debug.LogError(setTirggerRun);
+            animator.SetTrigger("FastRun");
+            
+            isStarted = true;
+
+        }
+        if (setTirggerRun == 1)
+        {
+            Debug.LogError(setTirggerRun);
+            animator.SetTrigger("DrunkRun");           
+            isStarted = true;
+        }
+        if (setTirggerRun == 2)
+        {
+            Debug.LogError(setTirggerRun);
+            
+            animator.SetTrigger("InjuredRun");           
+            isStarted = true;
+        }
+        
+        
+
     }
    
 }

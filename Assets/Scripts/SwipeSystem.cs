@@ -7,25 +7,19 @@ public class SwipeSystem : MonoBehaviour
 {
 
     public static SwipeSystem instance;
-
     public enum Direction { Left, Right, Up, Down }
+    public delegate void ClickDelegate(Vector2 pos);
+    public delegate void MoveDelegate(bool[] swipes);
+    public ClickDelegate ClickEvent;
+    public MoveDelegate MoveEvent;
 
     bool[] swipe = new bool[4];
-
-    Vector2 startTouch;
     bool touchMoved;
-    Vector2 swipeDelta;
 
     const float SWIPE_THRESHOLD = 50;
 
-    public delegate void ClickDelegate(Vector2 pos);
-    public ClickDelegate ClickEvent;
-
-
-    public delegate void MoveDelegate(bool[] swipes);
-    public MoveDelegate MoveEvent;
-
-
+    Vector2 startTouch;
+    Vector2 swipeDelta;
     Vector2 TouchPosition()
     {
         return (Vector2)(Input.mousePosition);
@@ -92,7 +86,7 @@ public class SwipeSystem : MonoBehaviour
         }
     }
 
-    void SendSwipe()
+    private void SendSwipe()
     {
         if (swipe[0] || swipe[1] || swipe[2] || swipe[3])
         {

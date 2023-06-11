@@ -5,15 +5,15 @@ using UnityEngine.SceneManagement;
 
 public class GamePause : MonoBehaviour
 {
-    public static bool GameIsPaused = false;
+    public static bool gameIsPause = false;
     public GameObject pauseMenuUI;
 
 
-    void Update()
+    private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            if (GameIsPaused)
+            if (gameIsPause)
             {
                 Resume();
             }
@@ -28,7 +28,7 @@ public class GamePause : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         pauseMenuUI.SetActive(false);
         Time.timeScale = 1f;
-        GameIsPaused = false;
+        gameIsPause = false;
     }
 
     public void Pause()
@@ -36,7 +36,7 @@ public class GamePause : MonoBehaviour
         Cursor.lockState = CursorLockMode.None;
         pauseMenuUI.SetActive(true);
         Time.timeScale = 0f;
-        GameIsPaused = true;
+        gameIsPause = true;
     }
 
     public void LoadMenu()
@@ -55,6 +55,6 @@ public class GamePause : MonoBehaviour
         Cursor.lockState = CursorLockMode.None;
         SceneManager.LoadScene("GameScene1");
         Time.timeScale = 1f;
-        GameIsPaused = false;
+        gameIsPause = false;
     }
 }

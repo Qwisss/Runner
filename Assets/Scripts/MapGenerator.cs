@@ -6,9 +6,9 @@ using UnityEngine;
 public class MapGenerator : MonoBehaviour
 {
     public static MapGenerator instance;
+    public float laneOffset = 2.5f;
     public List<GameObject> maps = new List<GameObject>();
     public List<GameObject> activeMaps = new List<GameObject>();
-    public float laneOffset = 2.5f;
 
 
     [SerializeField] private GameObject _obstacleTopPrefab;
@@ -19,8 +19,8 @@ public class MapGenerator : MonoBehaviour
 
     private int _itemSpace = 15;
     private int _itemCountInMap = 5;
-    private int coinsCountInItem = 10;
-    private int mapSize;
+    private int coinsCountInItem = 15;
+    private int _mapSize;
     private float coinsHeight = 0.5f;
 
     
@@ -38,7 +38,7 @@ public class MapGenerator : MonoBehaviour
     }
     enum TrackPos
     {
-        Left = -1, Center , Right = +1
+        Left = -1, Center = 0, Right = 1
     }
     enum CoinsStyle
     {
@@ -47,11 +47,17 @@ public class MapGenerator : MonoBehaviour
 
     private void Awake()
     {
-        instance = this; mapSize = _itemCountInMap * _itemSpace;
+        instance = this; 
+        _mapSize = _itemCountInMap * _itemSpace;
         maps.Add(MakeMap1());       
         maps.Add(MakeMap2());
+        maps.Add(MakeMap3());
+        maps.Add(MakeMap4());
         maps.Add(MakeMap1());
         maps.Add(MakeMap2());
+        maps.Add(MakeMap3());
+        maps.Add(MakeMap4());
+
 
         foreach (GameObject map in maps)
         {
@@ -70,7 +76,7 @@ public class MapGenerator : MonoBehaviour
         {
             map.transform.position -= new Vector3(0, 0, RoadGenerator.instance.speed * Time.deltaTime);
         }
-        if (activeMaps[0].transform.position.z < -mapSize)
+        if (activeMaps[0].transform.position.z < -_mapSize)
         {
             RemoveFirstActiveMap();
             AddActiveMap();
@@ -92,6 +98,9 @@ public class MapGenerator : MonoBehaviour
         }
         AddActiveMap();
         AddActiveMap();
+        AddActiveMap();
+        AddActiveMap();
+
     }
     private void AddActiveMap()
     {
@@ -103,8 +112,8 @@ public class MapGenerator : MonoBehaviour
             child.gameObject.SetActive(true);
         }
         go.transform.position = activeMaps.Count > 0 ?
-                                activeMaps[activeMaps.Count - 1].transform.position + Vector3.forward * mapSize :
-                                new Vector3(0, 0, 10);
+                                activeMaps[activeMaps.Count - 1].transform.position + Vector3.forward * _mapSize :
+                                new Vector3(0, 0, 40);
         maps.RemoveAt(r);
         activeMaps.Add(go);
     }
@@ -129,6 +138,14 @@ public class MapGenerator : MonoBehaviour
             else if (i == 4)
             {
                 item.SetValue(_obstacleBotPrefab, TrackPos.Left, CoinsStyle.Jump);
+            }
+            else if (i == 5)
+            {
+                item.SetValue(_obstacleBotPrefab, TrackPos.Right, CoinsStyle.Jump);
+            }
+            else if (i == 6)
+            {
+                item.SetValue(_obstacleBotPrefab, TrackPos.Right, CoinsStyle.Jump);
             }
             Vector3 obstaclePos = new Vector3((int)item.trackPos * laneOffset, 0, i * _itemSpace);
             CreateCoins(item.coinStyle, obstaclePos, result);
@@ -161,6 +178,98 @@ public class MapGenerator : MonoBehaviour
                 item.SetValue(_rampPrefab, TrackPos.Left, CoinsStyle.Ramp);
             }
             else if (i == 4)
+            {
+                item.SetValue(_obstacleBotPrefab, TrackPos.Right, CoinsStyle.Jump);
+            }
+            else if (i == 5)
+            {
+                item.SetValue(_obstacleBotPrefab, TrackPos.Right, CoinsStyle.Jump);
+            }
+            else if (i == 6)
+            {
+                item.SetValue(_obstacleBotPrefab, TrackPos.Right, CoinsStyle.Jump);
+            }
+            Vector3 obstaclePos = new Vector3((int)item.trackPos * laneOffset, 0, i * _itemSpace);
+            CreateCoins(item.coinStyle, obstaclePos, result);
+
+            if (item.obstacle != null)
+            {
+                GameObject go = Instantiate(item.obstacle, obstaclePos, Quaternion.identity);
+                go.transform.SetParent(result.transform);
+
+            }
+        }
+        return result;
+    }
+    GameObject MakeMap3()
+    {
+        GameObject result = new GameObject("Map1");
+        result.transform.SetParent(transform);
+        MapItem item = new MapItem();
+        for (int i = 0; i < _itemCountInMap; i++)
+        {
+            item.SetValue(null, TrackPos.Center, CoinsStyle.Line);
+
+
+            if (i == 2)
+            {
+                item.SetValue(_obstacleWallPrefab, TrackPos.Left, CoinsStyle.Line);
+            }
+            else if (i == 3)
+            {
+                item.SetValue(_rampPrefab, TrackPos.Left, CoinsStyle.Ramp);
+            }
+            else if (i == 4)
+            {
+                item.SetValue(_obstacleBotPrefab, TrackPos.Left, CoinsStyle.Jump);
+            }
+            else if (i == 5)
+            {
+                item.SetValue(_obstacleBotPrefab, TrackPos.Right, CoinsStyle.Jump);
+            }
+            else if (i == 6)
+            {
+                item.SetValue(_obstacleBotPrefab, TrackPos.Right, CoinsStyle.Jump);
+            }
+            Vector3 obstaclePos = new Vector3((int)item.trackPos * laneOffset, 0, i * _itemSpace);
+            CreateCoins(item.coinStyle, obstaclePos, result);
+
+            if (item.obstacle != null)
+            {
+                GameObject go = Instantiate(item.obstacle, obstaclePos, Quaternion.identity);
+                go.transform.SetParent(result.transform);
+
+            }
+        }
+        return result;
+    }
+    GameObject MakeMap4()
+    {
+        GameObject result = new GameObject("Map1");
+        result.transform.SetParent(transform);
+        MapItem item = new MapItem();
+        for (int i = 0; i < _itemCountInMap; i++)
+        {
+            item.SetValue(null, TrackPos.Center, CoinsStyle.Line);
+
+
+            if (i == 2)
+            {
+                item.SetValue(_obstacleBotPrefab, TrackPos.Left, CoinsStyle.Jump);
+            }
+            else if (i == 3)
+            {
+                item.SetValue(_rampPrefab, TrackPos.Left, CoinsStyle.Ramp);
+            }
+            else if (i == 4)
+            {
+                item.SetValue(_obstacleBotPrefab, TrackPos.Right, CoinsStyle.Jump);
+            }
+            else if (i == 5)
+            {
+                item.SetValue(_obstacleBotPrefab, TrackPos.Right, CoinsStyle.Jump);
+            }
+            else if (i == 6)
             {
                 item.SetValue(_obstacleBotPrefab, TrackPos.Right, CoinsStyle.Jump);
             }

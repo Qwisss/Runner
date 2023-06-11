@@ -3,17 +3,25 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
+
 public class GameManager : MonoBehaviour
 {
+    
     [SerializeField] private AudioSource _audioSource;    
     [SerializeField] private TextMeshProUGUI _coinCount;
 
     private int _coinsCount;
+    
 
-    void Awake()
+    private void Awake()
     {
+       
         _coinCount.text = PlayerPrefs.GetInt("coins").ToString();
+
     }
+  
+    
+
 
     public void AddCoin()
     {

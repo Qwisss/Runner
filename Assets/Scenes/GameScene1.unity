@@ -308,9 +308,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6c292998fcecca4ca708a651ff392a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  laneOffset: 2.5
   maps: []
   activeMaps: []
-  laneOffset: 2.5
   _obstacleTopPrefab: {fileID: 6054264374018520276, guid: 3d9d476fa3f12a54d920cf305ac0d17b, type: 3}
   _obstacleBotPrefab: {fileID: 5668763561741207029, guid: e8c642013f6bfab4ea388c8b89bb827f, type: 3}
   _obstacleWallPrefab: {fileID: 8312833159484442575, guid: 5facca14ddc5574449af68ee2564f394, type: 3}
@@ -909,7 +909,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Start!
+  m_text: Touch!
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -2997,6 +2997,10 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 6304945041094691226, guid: 38bf2a7a79f892945bc659bb7856b2d9, type: 3}
       propertyPath: m_Name
+      value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 6304945041094691226, guid: 38bf2a7a79f892945bc659bb7856b2d9, type: 3}
+      propertyPath: m_TagString
       value: Player
       objectReference: {fileID: 0}
     - target: {fileID: 6610936590467858484, guid: 38bf2a7a79f892945bc659bb7856b2d9, type: 3}
