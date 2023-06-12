@@ -9,6 +9,7 @@ TagManager:
   - NotLose
   - Lose
   - RampPlane
+  - TopLose
   layers:
   - Default
   - TransparentFX

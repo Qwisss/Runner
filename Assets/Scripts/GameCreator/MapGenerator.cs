@@ -126,7 +126,7 @@ public class MapGenerator : MonoBehaviour
 
             if (i == 2)
             {
-                item.SetValue(_obstacleWallPrefab, TrackPos.Left, CoinsStyle.Line);
+                item.SetValue(_obstacleTopPrefab, TrackPos.Left, CoinsStyle.Line);
             }
             else if (i == 3)
             {

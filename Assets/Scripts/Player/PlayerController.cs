@@ -17,17 +17,16 @@ public class PlayerController : MonoBehaviour
     private float _realGravity = -9.8f;   
     private int setTirggerRun;
 
-    Animator animator;
-   
-    Vector3 startGamePosition;
-    Vector3 targetVelocity;
+    private Animator _animator;
+    
+    private Vector3 _startGamePosition;
+    private Vector3 _targetVelocity;
 
-    bool isJumping = false;
-    bool isMoving = false;
-    //bool isSlide = false;
-    bool isStarted = false;
-   
-
+    private bool _isJumping = false;
+    private bool _isMoving = false;
+    private bool _isSliding = false;
+    private bool _isStarted = false;
+    
     Coroutine movingCoroutine;
 
     Rigidbody rigidBody;
@@ -39,36 +38,38 @@ public class PlayerController : MonoBehaviour
     }
 
     private void Start()
-    {    
+    {
         _laneOffset = MapGenerator.instance.laneOffset;
         FindObjectOfType<RoadGenerator>();
         rigidBody = GetComponent<Rigidbody>();
-        animator = GetComponent<Animator>();
-        startGamePosition = transform.position;
+        _animator = GetComponent<Animator>();
+        _startGamePosition = transform.position;
         //startGameRotation = transform.rotation;
-        /*SwipeSystem.instance.MoveEvent += MovePlayer;*/
-        
+        /*SwipeSystem.instance.MoveEvent += MovePlayer;*/          
     }
     private void Update()
     {
-        if (Input.GetKeyUp(KeyCode.A) && _pointFinish > -_laneOffset && isStarted)
+        if (Input.GetKeyUp(KeyCode.A) && _pointFinish > -_laneOffset && _isStarted)
         {
             MoveHorizontal(-_laneChangeSpeed);
         }
-        if (Input.GetKeyUp(KeyCode.D) && _pointFinish < _laneOffset && isStarted)
+        if (Input.GetKeyUp(KeyCode.D) && _pointFinish < _laneOffset && _isStarted)
         {
             MoveHorizontal(_laneChangeSpeed);
         }             
 
-        if (Input.GetKeyUp(KeyCode.W) && isJumping == false && isStarted)
+        if (Input.GetKeyUp(KeyCode.W) && _isJumping == false && _isStarted)
         {
+            _animator.SetTrigger("Jump");
             Jump();
-            animator.SetTrigger("Jump");
         }
-        if (Input.GetKeyUp(KeyCode.S) && isStarted)
+        if (Input.GetKeyUp(KeyCode.S) && _isStarted)
         {
-            animator.SetTrigger("Slide");
-            
+            if (!_isSliding)
+            {
+                _animator.SetTrigger("Slide");
+                _isSliding = true;                            
+            }
         }
     }
    
@@ -97,13 +98,14 @@ public class PlayerController : MonoBehaviour
         }
     }*/
   
-
+   
     private void Jump()
     {
-        isJumping = true;
+        _isJumping = true;
         rigidBody.AddForce(Vector3.up * _jumpPower, ForceMode.Impulse);
         Physics.gravity = new Vector3(0, _jumpGravity, 0);
         StartCoroutine(StopJumpCourutine());
+        
     }
 
     IEnumerator StopJumpCourutine()
@@ -112,7 +114,7 @@ public class PlayerController : MonoBehaviour
         {
             yield return new WaitForSeconds(0.02f);
         } while (rigidBody.velocity.y != 0);
-        isJumping = false;
+        _isJumping = false;
         Physics.gravity = new Vector3(0, _realGravity, 0);
     }
 
@@ -120,20 +122,20 @@ public class PlayerController : MonoBehaviour
 
     private void MoveHorizontal(float speed)
     {
-        animator.applyRootMotion = false; 
+        _animator.applyRootMotion = false; 
         _pointStart = _pointFinish;
         _pointFinish += Mathf.Sign(speed) * _laneOffset;
 
-        if (isMoving) 
+        if (_isMoving) 
         { 
-            StopCoroutine (movingCoroutine); isMoving = false; 
+            StopCoroutine (movingCoroutine); _isMoving = false; 
         }
         movingCoroutine = StartCoroutine(MoveCoroutine(speed));            
     }
 
     IEnumerator MoveCoroutine(float vectorX)
     {
-        isMoving = true;
+        _isMoving = true;
         while (Mathf.Abs(_pointStart - transform.position.x) < _laneOffset)
         {
             yield return new WaitForFixedUpdate();
@@ -149,7 +151,12 @@ public class PlayerController : MonoBehaviour
             rigidBody.velocity = new Vector3(rigidBody.velocity.x, -10, rigidBody.velocity.y);
 
         }
-        isMoving = false;
+        _isMoving = false;
+    }
+
+    public void OnSlideAnimationComplete()
+    {       
+        _isSliding = false;       
     }
 
 
@@ -168,7 +175,12 @@ public class PlayerController : MonoBehaviour
         {
             FindObjectOfType<GamePause>().RestartGame();
         }
+        if (other.gameObject.tag == "TopLose" & _isSliding == false) 
+        {
+            FindObjectOfType<GamePause>().RestartGame();
+        }
     }
+    
     private void OnTriggerExit(Collider other)
     {
         if (other.gameObject.tag == "Ramp")
@@ -189,7 +201,7 @@ public class PlayerController : MonoBehaviour
     {
         if(collision.gameObject.tag == "RampPlane")
         {
-            if (rigidBody.velocity.x == 0 && isJumping == false)
+            if (rigidBody.velocity.x == 0 && _isJumping == false)
             {
                 rigidBody.velocity = new Vector3(rigidBody.velocity.x, -10, rigidBody.velocity.z);
             }
@@ -199,19 +211,21 @@ public class PlayerController : MonoBehaviour
     {
         if (setTirggerRun == 0)
         {
-            animator.SetTrigger("FastRun");
+            _animator.SetTrigger("FastRun");
 
         }
         if (setTirggerRun == 1)
         {
-            animator.SetTrigger("DrunkRun");                      
+            _animator.SetTrigger("DrunkRun");                      
         }
         if (setTirggerRun == 2)
         {          
-            animator.SetTrigger("InjuredRun");           
+            _animator.SetTrigger("InjuredRun");           
         }
-        isStarted = true;
+        _isStarted = true;
+        
     }
+    
 }
    
 
