@@ -58,12 +58,12 @@ public class PlayerController : MonoBehaviour
             MoveHorizontal(_laneChangeSpeed);
         }             
 
-        if (Input.GetKeyUp(KeyCode.W) && _isJumping == false && _isStarted)
+        if (Input.GetKeyUp(KeyCode.W) && _isJumping == false && _isStarted && _isSliding == false)
         {
             _animator.SetTrigger("Jump");
             Jump();
         }
-        if (Input.GetKeyUp(KeyCode.S) && _isStarted)
+        if (Input.GetKeyUp(KeyCode.S) && _isStarted && _isJumping == false)
         {
             if (!_isSliding)
             {

@@ -49,11 +49,12 @@ public class MapGenerator : MonoBehaviour
     {
         instance = this; 
         _mapSize = _itemCountInMap * _itemSpace;
-        maps.Add(MakeMap1());       
+        maps.Add(MakeMap1());
         maps.Add(MakeMap2());
         maps.Add(MakeMap3());
         maps.Add(MakeMap4());
-        
+
+
 
 
         foreach (GameObject map in maps)
@@ -121,9 +122,7 @@ public class MapGenerator : MonoBehaviour
         MapItem item = new MapItem();
         for (int i = 0; i < _itemCountInMap; i++)
         {
-            item.SetValue(null,TrackPos.Center,CoinsStyle.Line);
-            
-
+            item.SetValue(null,TrackPos.Center,CoinsStyle.Line);           
             if (i == 2)
             {
                 item.SetValue(_obstacleTopPrefab, TrackPos.Left, CoinsStyle.Line);
@@ -138,11 +137,7 @@ public class MapGenerator : MonoBehaviour
             }
             else if (i == 5)
             {
-                item.SetValue(_obstacleBotPrefab, TrackPos.Right, CoinsStyle.Jump);
-            }
-            else if (i == 6)
-            {
-                item.SetValue(_obstacleBotPrefab, TrackPos.Right, CoinsStyle.Jump);
+                item.SetValue(_obstacleBotPrefab, TrackPos.Left, CoinsStyle.Jump);
             }
             Vector3 obstaclePos = new Vector3((int)item.trackPos * laneOffset, 0, i * _itemSpace);
             CreateCoins(item.coinStyle, obstaclePos, result);
@@ -178,14 +173,7 @@ public class MapGenerator : MonoBehaviour
             {
                 item.SetValue(_obstacleBotPrefab, TrackPos.Right, CoinsStyle.Jump);
             }
-            else if (i == 5)
-            {
-                item.SetValue(_obstacleBotPrefab, TrackPos.Right, CoinsStyle.Jump);
-            }
-            else if (i == 6)
-            {
-                item.SetValue(_obstacleBotPrefab, TrackPos.Right, CoinsStyle.Jump);
-            }
+          
             Vector3 obstaclePos = new Vector3((int)item.trackPos * laneOffset, 0, i * _itemSpace);
             CreateCoins(item.coinStyle, obstaclePos, result);
 
@@ -220,14 +208,7 @@ public class MapGenerator : MonoBehaviour
             {
                 item.SetValue(_obstacleBotPrefab, TrackPos.Left, CoinsStyle.Jump);
             }
-            else if (i == 5)
-            {
-                item.SetValue(_obstacleBotPrefab, TrackPos.Right, CoinsStyle.Jump);
-            }
-            else if (i == 6)
-            {
-                item.SetValue(_obstacleBotPrefab, TrackPos.Right, CoinsStyle.Jump);
-            }
+            
             Vector3 obstaclePos = new Vector3((int)item.trackPos * laneOffset, 0, i * _itemSpace);
             CreateCoins(item.coinStyle, obstaclePos, result);
 
@@ -259,14 +240,6 @@ public class MapGenerator : MonoBehaviour
                 item.SetValue(_rampPrefab, TrackPos.Left, CoinsStyle.Ramp);
             }
             else if (i == 4)
-            {
-                item.SetValue(_obstacleBotPrefab, TrackPos.Right, CoinsStyle.Jump);
-            }
-            else if (i == 5)
-            {
-                item.SetValue(_obstacleBotPrefab, TrackPos.Right, CoinsStyle.Jump);
-            }
-            else if (i == 6)
             {
                 item.SetValue(_obstacleBotPrefab, TrackPos.Right, CoinsStyle.Jump);
             }
