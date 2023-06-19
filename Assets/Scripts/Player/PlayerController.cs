@@ -15,7 +15,7 @@ public class PlayerController : MonoBehaviour
     private float _jumpPower = 15f;
     private float _jumpGravity = -40f;
     private float _realGravity = -9.8f;   
-    private int setTirggerRun;
+    private int _setTirggerRun;
 
     private Animator _animator;
     
@@ -34,7 +34,7 @@ public class PlayerController : MonoBehaviour
 
     private void Awake()
     {
-        setTirggerRun = DataHolder.runIndexForPlayerController;       
+        InitializeAnimIndex();       
     }
 
     private void Start()
@@ -59,8 +59,7 @@ public class PlayerController : MonoBehaviour
         }             
 
         if (Input.GetKeyUp(KeyCode.W) && _isJumping == false && _isStarted && _isSliding == false)
-        {
-            _animator.SetTrigger("Jump");
+        {           
             Jump();
         }
         if (Input.GetKeyUp(KeyCode.S) && _isStarted && _isJumping == false)
@@ -72,51 +71,91 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
-   
-
-   /* private void MovePlayer(bool[] swipes)
+    private void InitializeAnimIndex()
+    {       
+        if (!PlayerPrefs.HasKey("AnimIndex"))
+        {
+            _setTirggerRun = DataHolder.runIndexForPlayerController;
+            PlayerPrefs.SetInt("AnimIndex", _setTirggerRun);
+            PlayerPrefs.Save();
+        }
+        if (PlayerPrefs.HasKey("AnimIndex"))
+        {
+            _setTirggerRun = PlayerPrefs.GetInt("AnimIndex");
+        }
+    }
+    public void StartRun()
     {
-        if (swipes[(int)SwipeSystem.Direction.Left] ||Input.GetKeyUp(KeyCode.A) && _pointFinish > -_laneOffset)
+        if (_setTirggerRun == 0)
         {
-            MoveHorizontal(-_laneChangeSpeed);
-        }
-        if (swipes[(int)SwipeSystem.Direction.Right] || Input.GetKeyUp(KeyCode.D) && _pointFinish < _laneOffset)
-        {
-            MoveHorizontal(_laneChangeSpeed);
-        }
+            _animator.SetTrigger("FastRun");
 
-        if (swipes[(int)SwipeSystem.Direction.Up] || Input.GetKeyUp(KeyCode.W) && isJumping == false )
-        {
-            Jump();
-            animator.SetTrigger("Jump");
         }
-        if (swipes[(int)SwipeSystem.Direction.Down] || Input.GetKeyUp(KeyCode.S))
+        if (_setTirggerRun == 1)
         {
-            animator.SetTrigger("Slide");
-            //isSlide = true;
-           
+            _animator.SetTrigger("DrunkRun");
         }
-    }*/
-  
-   
-    private void Jump()
-    {
-        _isJumping = true;
-        rigidBody.AddForce(Vector3.up * _jumpPower, ForceMode.Impulse);
-        Physics.gravity = new Vector3(0, _jumpGravity, 0);
-        StartCoroutine(StopJumpCourutine());
-        
+        if (_setTirggerRun == 2)
+        {
+            _animator.SetTrigger("InjuredRun");
+        }
+        _isStarted = true;
+
     }
 
-    IEnumerator StopJumpCourutine()
+
+    /* private void MovePlayer(bool[] swipes)
+     {
+         if (swipes[(int)SwipeSystem.Direction.Left] ||Input.GetKeyUp(KeyCode.A) && _pointFinish > -_laneOffset)
+         {
+             MoveHorizontal(-_laneChangeSpeed);
+         }
+         if (swipes[(int)SwipeSystem.Direction.Right] || Input.GetKeyUp(KeyCode.D) && _pointFinish < _laneOffset)
+         {
+             MoveHorizontal(_laneChangeSpeed);
+         }
+
+         if (swipes[(int)SwipeSystem.Direction.Up] || Input.GetKeyUp(KeyCode.W) && isJumping == false )
+         {
+             Jump();
+             animator.SetTrigger("Jump");
+         }
+         if (swipes[(int)SwipeSystem.Direction.Down] || Input.GetKeyUp(KeyCode.S))
+         {
+             animator.SetTrigger("Slide");
+             //isSlide = true;
+
+         }
+     }*/
+
+
+    private void Jump()
     {
-        do
+        if (_isJumping == false)
+        {
+            _isJumping = true;
+            rigidBody.AddForce(Vector3.up * _jumpPower, ForceMode.Impulse);
+            Physics.gravity = new Vector3(0, _jumpGravity, 0);
+            _animator.SetTrigger("Jump");
+        }
+        
+        //StartCoroutine(StopJumpCourutine());
+        
+    }
+    public void JumpAnimationComplete()
+    {
+        _isJumping = false;
+    }
+
+    /*IEnumerator StopJumpCourutine()
+    {
+       *//* do
         {
             yield return new WaitForSeconds(0.02f);
         } while (rigidBody.velocity.y != 0);
         _isJumping = false;
-        Physics.gravity = new Vector3(0, _realGravity, 0);
-    }
+        Physics.gravity = new Vector3(0, _realGravity, 0);*//*
+    }*/
 
 
 
@@ -195,6 +234,10 @@ public class PlayerController : MonoBehaviour
         {
             rigidBody.velocity = new Vector3(rigidBody.velocity.x, 0, rigidBody.velocity.z);
         }
+        if (collision.gameObject.tag == "NotLose")
+        {
+            MoveHorizontal(-_lastVectorX);
+        }
     }
 
     private void OnCollisionExit(Collision collision)
@@ -206,26 +249,8 @@ public class PlayerController : MonoBehaviour
                 rigidBody.velocity = new Vector3(rigidBody.velocity.x, -10, rigidBody.velocity.z);
             }
         }
-    }
-    public void StartRun()
-    {
-        if (setTirggerRun == 0)
-        {
-            _animator.SetTrigger("FastRun");
-
-        }
-        if (setTirggerRun == 1)
-        {
-            _animator.SetTrigger("DrunkRun");                      
-        }
-        if (setTirggerRun == 2)
-        {          
-            _animator.SetTrigger("InjuredRun");           
-        }
-        _isStarted = true;
-        
-    }
-    
+       
+    }   
 }
    
 
